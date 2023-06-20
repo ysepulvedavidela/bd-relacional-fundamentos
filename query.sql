@@ -37,3 +37,19 @@ SELECT payment_id Numero, payment_date Fecha, amount Total FROM payment;
 SELECT title, release_year, rental_rate FROM film
 WHERE rental_rate > 4 AND release_year = 2006
 ORDER BY release_year DESC;
+
+-- Realiza un Diccionario de datos que contenga el nombre de las tablas y columnas, si éstas pueden ser nulas, y su tipo de dato correspondiente. --
+SELECT
+    t1.TABLE_NAME AS tabla_nombre,
+    t1.COLUMN_NAME AS columna_nombre,
+    t1.IS_NULLABLE AS columna_nulo,
+    t1.DATA_TYPE AS columna_tipo_dato,
+    COALESCE(t1.NUMERIC_PRECISION,
+    t1.CHARACTER_MAXIMUM_LENGTH) AS columna_longitud
+FROM 
+    INFORMATION_SCHEMA.COLUMNS t1
+    INNER JOIN PG_CLASS t2 ON (t2.RELNAME = t1.TABLE_NAME)
+WHERE 
+    t1.TABLE_SCHEMA = 'public'
+ORDER BY
+    t1.TABLE_NAME;
